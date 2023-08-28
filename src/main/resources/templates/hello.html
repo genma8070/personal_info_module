@@ -1,0 +1,13 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>Hello Thymeleaf</title>
+</head>
+<body>
+	<h1 th:text="${message}"></h1>
+	<h1 th:text="'hello world'"></h1>
+	<h1>[['hello world!!']]</h1>
+	<h1>[[${modelValue}]]</h1>
+</body>
+</html>
