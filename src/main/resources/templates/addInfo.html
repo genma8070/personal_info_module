@@ -1,0 +1,129 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: header_fragment(title = '社員情報モジュール', scripts = ~{::script}, links = ~{::link})"></head>
+<meta charset="UTF-8" />
+</head>
+<body>
+
+<div class="container-fluid">
+    <h1>新規個人情報</h1>
+    <div>
+
+        <div class="row justify-content-center mt-5 ">
+
+            <div th:action="@{/info/new}" th:object="${personalInfoRequest}"
+                 th:method="post"
+                 class="col-10 border border-dark d-flex flex-column p-0">
+                <div class="col border border-primary border-3 bg-light text-center">基本情報</div>
+
+                <label class="ms-2">マイナンバー：<span class="text-danger">※入社してから記入</span></label>
+                <input type="text" th:field="*{myNumber}" class="mx-3">
+
+                <label class="ms-2">名前：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{name}" class="mx-3">
+
+                <label class="ms-2">名前（カタカナ）：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{nameKatakana}" class="mx-3">
+
+                <label class="ms-2">名前（ローマ字）：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{nameRoma}" class="mx-3">
+
+                <label class="ms-2">国籍:<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{region}" class="mx-3">
+
+                <label class="ms-2">性別：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{sex}" class="mx-3">
+
+                <label class="ms-2">生年月日：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{birth}" class="mx-3">
+
+                <label class="ms-2">年齢:<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{age}" class="mx-3">
+
+                <label class="ms-2">入社日：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{startDate}" class="mx-3">
+
+                <label class="ms-2">退職日：<span class="text-danger"></span></label>
+                <input type="text" th:field="*{endDate}" class="mx-3 mb-2">
+            </div>
+
+            <div th:action="@{/info/new}" th:object="${employeeInfoRequest}"
+                 th:method="post"
+                 class="col-10 border border-dark d-flex flex-column p-0">
+                <div class="col border border-primary border-3 bg-light text-center">連絡先</div>
+
+                <label class="ms-2">固定電話：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{telephone}" class="mx-3">
+
+                <label class="ms-2">携帯電話：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{cellphone}" class="mx-3">
+
+                <label class="ms-2">メールアドレス（社内）：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{officeMail}" class="mx-3">
+
+                <label class="ms-2">メールアドレス（その他）：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{otherMail}" class="mx-3">
+
+                <label class="ms-2">郵便番号：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{postCode}" class="mx-3">
+
+                <label class="ms-2">住所：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{address}" class="mx-3 mb-2">
+            </div>
+
+            <div th:action="@{/info/new}" th:object="${employeeInfoRequest}"
+                 th:method="post"
+                 class="col-10 border border-dark d-flex flex-column p-0">
+                <div class="col border border-primary border-3 bg-light text-center">在留情報</div>
+
+                <label class="ms-2">パスポート番号：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{passportNumber}" class="mx-3">
+
+                <label class="ms-2">パスポート期限：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{passportLimitDate}" class="mx-3">
+
+                <label class="ms-2">在留カード番号：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{residentCardNumber}" class="mx-3">
+
+                <label class="ms-2">在留カード開始日：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{residentCardStartDate}" class="mx-3">
+
+                <label class="ms-2">在留カード終了日：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{residentCardEndDate}" class="mx-3">
+
+                <label class="ms-2">在留資格：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{residentCardStatus}" class="mx-3 mb-2">
+            </div>
+
+            <div th:action="@{/info/new}" th:object="${employeeInfoRequest}"
+                 th:method="post"
+                 class="col-10 border border-dark d-flex flex-column p-0">
+                <div class="col border border-primary border-3 bg-light text-center">給付情報</div>
+
+                <label class="ms-2">雇用保険番号：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{employmentInsuranceNumber}" class="mx-3">
+
+                <label class="ms-2">年金番号：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{pensionNumber}" class="mx-3">
+
+                <label class="ms-2">銀行名称：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{bankName}" class="mx-3">
+
+                <label class="ms-2">本店名：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{headquarters}" class="mx-3">
+
+                <label class="ms-2">口座番号：<span class="text-danger">※</span></label>
+                <input type="text" th:field="*{bankAccountNumber}" class="mx-3 mb-2">
+            </div>
+
+            <div class="text-center mt-3 mb-2">
+                <a th:href="@{/info/home}" class="btn btn-secondary"> キャンセル </a>
+                <a th:href="@{/user/{id}/edit(id=*{id})}" class="btn btn-primary"> 登録 </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

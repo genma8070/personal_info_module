@@ -1,0 +1,84 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="common/header :: header_fragment(title = '社員情報モジュール', scripts = ~{::script}, links = ~{::link})"></head>
+<meta charset="UTF-8" />
+</head>
+<body>
+
+	<div class="container-fluid">
+		<h1>個人情報詳細</h1>
+		<div th:object="${allInfo}">
+			<div class="d-flex justify-content-around">
+				<div>
+					<a class="btn border border-3 border-dark p-1 bg-light rounded" th:href="@{/info/{id}/category/0(id=${allInfo.id})}">基本情報</a>
+				</div>
+				<div>
+					<a class="btn border border-3 border-dark p-1 bg-light rounded" th:href="@{/info/{id}/category/1(id=${allInfo.id})}">連絡先</a>
+				</div>
+				<div>
+					<a class="btn border border-3 border-dark p-1 bg-light rounded" th:href="@{/info/{id}/category/2(id=${allInfo.id})}">在留情報</a>
+				</div>
+				<div>
+					<a class="btn border border-3 border-dark p-1 bg-light rounded" th:href="@{/info/{id}/category/3(id=${allInfo.id})}">給付情報</a>
+				</div>
+
+			</div>
+
+			<div class="row justify-content-center mt-5 ">
+
+				<div th:if="${category} == 0"
+					class="col-10 border border-dark d-flex flex-column p-0">
+					<div class="col border" th:text="マイナンバー： + *{myNumber}"></div>
+					<div class="col border">名前：</div>
+					<div class="col border">名前（カタカナ）：</div>
+					<div class="col border">名前（ローマ字）：</div>
+					<div class="col border">国籍:</div>
+					<div class="col border">性別：</div>
+					<div class="col border">生年月日：</div>
+					<div class="col border">年齢:</div>
+					<div class="col border">入社日：</div>
+					<div class="col border">退職日：</div>
+				</div>
+
+				<div th:if="${category} == 1"
+					class="col-10 border border-dark d-flex flex-column p-0">
+					<div class="col border">固定電話：</div>
+					<div class="col border">携帯電話：</div>
+					<div class="col border">メールアドレス（社内）：</div>
+					<div class="col border">メールアドレス（その他）：</div>
+					<div class="col border">郵便番号：</div>
+					<div class="col border">住所：</div>
+				</div>
+
+				<div th:if="${category == 2}"
+					class="col-10 border border-dark d-flex flex-column p-0">
+					<div class="col border">パスポート番号：</div>
+					<div class="col border">パスポート期限：</div>
+					<div class="col border">在留カード番号</div>
+					<div class="col border">在留カード開始日：</div>
+					<div class="col border">在留カード終了日：</div>
+					<div class="col border">在留資格：</div>
+				</div>
+
+				<div th:if="${category == 3}"
+					class="col-10 border border-dark d-flex flex-column p-0">
+					<div class="col border">雇用保険番号：</div>
+					<div class="col border">年金番号：</div>
+					<div class="col border">銀行名称：</div>
+					<div class="col border">本店名：</div>
+					<div class="col border">口座番号：</div>
+				</div>
+			</div>
+			<div class="text-center mt-3">
+				<a th:href="@{/user/{id}/edit(id=*{id})}" class="btn btn-primary"> 編集 </a> 
+				
+				<a th:href="@{/user/{id}/delete(id=*{id})}"	class="btn btn-secondary"> 削除 </a> 
+				
+				<a th:href="@{/info/home}" class="btn btn-secondary"> 一覧に戻る </a>
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>
