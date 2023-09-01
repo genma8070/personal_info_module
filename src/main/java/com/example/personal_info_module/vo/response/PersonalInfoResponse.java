@@ -2,6 +2,7 @@ package com.example.personal_info_module.vo.response;
 
 import java.time.LocalDate;
 
+import com.example.personal_info_module.vo.request.PersonalInfoRequest;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -30,6 +31,8 @@ public class PersonalInfoResponse {
 	private LocalDate endDate;
 
 	private Boolean available;
+	
+	private PersonalInfoRequest reqP;
 	
 	private String message;
 
@@ -182,6 +185,19 @@ public class PersonalInfoResponse {
 	public PersonalInfoResponse(String message) {
 		super();
 		this.message = message;
+	}
+
+	public PersonalInfoRequest getReqP() {
+		return reqP;
+	}
+
+	public void setReqP(PersonalInfoRequest reqP) {
+		this.reqP = reqP;
+	}
+
+	public PersonalInfoResponse(PersonalInfoRequest reqP) {
+		super();
+		this.reqP = reqP;
 	}
 
 	

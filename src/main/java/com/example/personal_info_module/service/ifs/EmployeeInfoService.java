@@ -9,4 +9,6 @@ public interface EmployeeInfoService {
 
 	public EmployeeInfoResponse updateInfo(EmployeeInfoRequest req);
 	
+	public EmployeeInfoResponse findInfoF(Integer id);
+	
 }

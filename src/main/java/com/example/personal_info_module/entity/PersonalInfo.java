@@ -21,13 +21,13 @@ public class PersonalInfo {
 	@Column(name = "my_number")
 	private String myNumber;
 	
-	@Column(name = "newnames_id")
+	@Column(name = "name")
 	private String name;
 	
 	@Column(name = "name_katakana")
 	private String nameKatakana;
 	
-	@Column(name = "name+roma")
+	@Column(name = "name_roma")
 	private String nameRoma;
 	
 	@Column(name = "region")
@@ -168,12 +168,5 @@ public class PersonalInfo {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-	public PersonalInfo(Integer id, Boolean available) {
-		super();
-		this.id = id;
-		this.available = available;
-	}
-
 	
 }

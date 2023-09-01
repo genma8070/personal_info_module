@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,6 +14,7 @@ import javax.persistence.Table;
 public class EmployeeInfo {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 	
@@ -48,8 +51,8 @@ public class EmployeeInfo {
 	@Column(name = "post_code")
 	private String postCode;
 	
-	@Column(name = "adress")
-	private String adress;
+	@Column(name = "address")
+	private String address;
 	
 	@Column(name = "employment_insurance_number")
 	private String employmentInsuranceNumber;
@@ -162,12 +165,12 @@ public class EmployeeInfo {
 		this.postCode = postCode;
 	}
 
-	public String getAdress() {
-		return adress;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setAdress(String adress) {
-		this.adress = adress;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getEmploymentInsuranceNumber() {
@@ -212,7 +215,7 @@ public class EmployeeInfo {
 
 	public EmployeeInfo(Integer id, String passportNumber, LocalDate passportLimitDate, String residentCardNumber,
 			LocalDate residentCardStartDate, LocalDate residentCardEndDate, Boolean residentCardStatus,
-			String telephone, String cellphone, String officeMail, String otherMail, String postCode, String adress,
+			String telephone, String cellphone, String officeMail, String otherMail, String postCode, String address,
 			String employmentInsuranceNumber, String pensionNumber, String bankName, String headquarters,
 			String bankAccountNumber) {
 		super();
@@ -228,7 +231,7 @@ public class EmployeeInfo {
 		this.officeMail = officeMail;
 		this.otherMail = otherMail;
 		this.postCode = postCode;
-		this.adress = adress;
+		this.address = address;
 		this.employmentInsuranceNumber = employmentInsuranceNumber;
 		this.pensionNumber = pensionNumber;
 		this.bankName = bankName;

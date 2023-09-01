@@ -2,18 +2,24 @@ package com.example.personal_info_module.vo.request;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+
 public class EmployeeInfoRequest {
 
 	private Integer id;
 
 	private String passportNumber;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate passportLimitDate;
 
 	private String residentCardNumber;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate residentCardStartDate;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate residentCardEndDate;
 
 	private Boolean residentCardStatus;

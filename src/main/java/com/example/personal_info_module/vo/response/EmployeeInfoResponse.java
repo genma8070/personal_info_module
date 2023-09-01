@@ -2,8 +2,13 @@ package com.example.personal_info_module.vo.response;
 
 import java.time.LocalDate;
 
+import com.example.personal_info_module.vo.request.EmployeeInfoRequest;
+
 public class EmployeeInfoResponse {
 
+	
+	private EmployeeInfoRequest reqE;
+	
 	private Integer id;
 
 	private String passportNumber;
@@ -255,6 +260,19 @@ public class EmployeeInfoResponse {
 	public EmployeeInfoResponse(String massage) {
 		super();
 		this.massage = massage;
+	}
+
+	public EmployeeInfoRequest getReqE() {
+		return reqE;
+	}
+
+	public void setReqE(EmployeeInfoRequest reqE) {
+		this.reqE = reqE;
+	}
+
+	public EmployeeInfoResponse(EmployeeInfoRequest reqE) {
+		super();
+		this.reqE = reqE;
 	}
 	
 }

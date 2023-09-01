@@ -13,7 +13,13 @@ public interface PersonalInfoService {
 	
 	public PersonalInfoResponse deleteInfo(PersonalInfoRequest req);
 	
+	public PersonalInfoResponse findInfoP(Integer id);
+	
 	public FullInfoResponse getAllInfo();
 	
-	public FullInfoResponse findInfoById(PersonalInfoRequest req);
+	public FullInfoResponse getNewstInfo();
+	
+	public FullInfoResponse findInfoById(Integer id);
+	
+	public FullInfoResponse search(PersonalInfoRequest req);
 }

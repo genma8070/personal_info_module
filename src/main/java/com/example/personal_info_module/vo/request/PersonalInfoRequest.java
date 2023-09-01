@@ -2,6 +2,8 @@ package com.example.personal_info_module.vo.request;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class PersonalInfoRequest {
 
 	private Integer id;
@@ -18,12 +20,15 @@ public class PersonalInfoRequest {
 
 	private Boolean sex;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birth;
 
 	private String age;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate startDate;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate endDate;
 
 	private Boolean available;

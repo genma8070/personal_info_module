@@ -28,6 +28,7 @@ dependencies {
     implementation 'javax.activation:activation:1.1.1'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time', version: '3.0.4.RELEASE'
 }
 
 tasks.named('test') {

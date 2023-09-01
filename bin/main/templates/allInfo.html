@@ -27,58 +27,55 @@
 
 			<div class="row justify-content-center mt-5 ">
 
-				<div th:if="${category} == 0"
-					class="col-10 border border-dark d-flex flex-column p-0">
-					<div class="col border" th:text="マイナンバー： + *{myNumber}"></div>
-					<div class="col border">名前：</div>
-					<div class="col border">名前（カタカナ）：</div>
-					<div class="col border">名前（ローマ字）：</div>
-					<div class="col border">国籍:</div>
-					<div class="col border">性別：</div>
-					<div class="col border">生年月日：</div>
-					<div class="col border">年齢:</div>
-					<div class="col border">入社日：</div>
-					<div class="col border">退職日：</div>
+				<div th:if="${category} == 0" class="col-10 border border-dark d-flex flex-column p-0">
+					<div class="col border" th:text="'マイナンバー： ' + ${allInfo.myNumber}"></div>
+					<div class="col border" th:text="'名前： ' + ${allInfo.name}"></div>
+					<div class="col border" th:text="'名前（カタカナ）： ' + ${allInfo.nameKatakana}"></div>
+					<div class="col border" th:text="'名前（ローマ字）： ' + ${allInfo.nameRoma}"></div>
+					<div class="col border" th:text="'国籍: ' + ${allInfo.region}"></div>
+					<div class="col border" th:text="'性別： ' + ${allInfo.sex}"></div>
+					<div class="col border" th:text="'生年月日： ' + ${allInfo.birth}"></div>
+					<div class="col border" th:text="'年齢: ' + ${allInfo.age}"></div>
+					<div class="col border" th:text="'入社日： ' + ${allInfo.startDate}"></div>
+					<div class="col border" th:if="*{endDate} == null" th:text="'退職日： ' + '-'"></div>
+					<div class="col border" th:if="*{endDate} != null" th:text="'退職日： ' + ${allInfo.endDate}"></div>
+					<div class="col border" th:if="*{available}" th:text="'在籍状況： 在籍中'"></div>
+					<div class="col border" th:if="!*{available}" th:text="'在籍状況： 未在籍'"></div>
 				</div>
 
-				<div th:if="${category} == 1"
-					class="col-10 border border-dark d-flex flex-column p-0">
-					<div class="col border">固定電話：</div>
-					<div class="col border">携帯電話：</div>
-					<div class="col border">メールアドレス（社内）：</div>
-					<div class="col border">メールアドレス（その他）：</div>
-					<div class="col border">郵便番号：</div>
-					<div class="col border">住所：</div>
+				<div th:if="${category} == 1" class="col-10 border border-dark d-flex flex-column p-0">
+					<div class="col border" th:text="'固定電話： ' + ${allInfo.telephone}"></div>
+					<div class="col border" th:text="'携帯電話： ' + ${allInfo.cellphone}"></div>
+					<div class="col border" th:text="'メールアドレス（社内）： ' + ${allInfo.officeMail}"></div>
+					<div class="col border" th:text="'メールアドレス（その他）： ' + ${allInfo.otherMail}"></div>
+					<div class="col border" th:text="'郵便番号： ' + ${allInfo.postCode}"></div>
+					<div class="col border" th:text="'住所： ' + ${allInfo.address}"></div>
 				</div>
 
-				<div th:if="${category == 2}"
-					class="col-10 border border-dark d-flex flex-column p-0">
-					<div class="col border">パスポート番号：</div>
-					<div class="col border">パスポート期限：</div>
-					<div class="col border">在留カード番号</div>
-					<div class="col border">在留カード開始日：</div>
-					<div class="col border">在留カード終了日：</div>
-					<div class="col border">在留資格：</div>
+				<div th:if="${category == 2}" class="col-10 border border-dark d-flex flex-column p-0">
+					<div class="col border" th:text="'パスポート番号： ' + ${allInfo.passportNumber}"></div>
+					<div class="col border" th:text="'パスポート期限： ' + ${allInfo.passportLimitDate}"></div>
+					<div class="col border" th:text="'在留カード番号： ' + ${allInfo.residentCardNumber}"></div>
+					<div class="col border" th:text="'在留カード開始日： ' + ${allInfo.residentCardStartDate}"></div>
+					<div class="col border" th:text="'在留カード終了日： ' + ${allInfo.residentCardEndDate}"></div>
+					<div class="col border" th:if="*{residentCardStatus}" th:text="'在留資格： 有効'"></div>
+					<div class="col border" th:if="!*{residentCardStatus}" th:text="'在留資格： 無効'"></div>
 				</div>
 
-				<div th:if="${category == 3}"
-					class="col-10 border border-dark d-flex flex-column p-0">
-					<div class="col border">雇用保険番号：</div>
-					<div class="col border">年金番号：</div>
-					<div class="col border">銀行名称：</div>
-					<div class="col border">本店名：</div>
-					<div class="col border">口座番号：</div>
+				<div th:if="${category == 3}" class="col-10 border border-dark d-flex flex-column p-0">
+					<div class="col border" th:text="'雇用保険番号： ' + ${allInfo.employmentInsuranceNumber}"></div>
+					<div class="col border" th:text="'年金番号： ' + ${allInfo.pensionNumber}"></div>
+					<div class="col border" th:text="'銀行名称： ' + ${allInfo.bankName}"></div>
+					<div class="col border" th:text="'本店名： ' + ${allInfo.headquarters}"></div>
+					<div class="col border" th:text="'口座番号： ' + ${allInfo.bankAccountNumber}"></div>
 				</div>
 			</div>
 			<div class="text-center mt-3">
-				<a th:href="@{/user/{id}/edit(id=*{id})}" class="btn btn-primary"> 編集 </a> 
-				
-				<a th:href="@{/user/{id}/delete(id=*{id})}"	class="btn btn-secondary"> 削除 </a> 
-				
+				<a th:href="@{/info/{id}/edit(id=*{id})}" class="btn btn-primary"> 編集 </a> 
+				<a th:href="@{/info/{id}/delete(id=*{id})}"	class="btn btn-secondary"> 削除 </a> 
 				<a th:href="@{/info/home}" class="btn btn-secondary"> 一覧に戻る </a>
 			</div>
 		</div>
-
 	</div>
 </body>
 </html>
