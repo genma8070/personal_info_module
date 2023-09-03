@@ -8,6 +8,12 @@
 
 	<div class="container-fluid">
 		<h1>個人情報詳細</h1>
+		<div th:if="${personalInfoResponse}" th:object="${personalInfoResponse}">
+      		<label class="text-danger" th:text="*{message}"></label>
+  		 </div>
+    	<!-- <div th:if="${employeeInfoResponse}" th:object="${employeeInfoResponse}">
+      		<label class="text-danger" th:text="*{message}"></label>
+  		</div> -->
 		<div th:object="${allInfo}">
 			<div class="d-flex justify-content-around">
 				<div>
@@ -72,7 +78,7 @@
 			</div>
 			<div class="text-center mt-3">
 				<a th:href="@{/info/{id}/edit(id=*{id})}" class="btn btn-primary"> 編集 </a> 
-				<a th:href="@{/info/{id}/delete(id=*{id})}"	class="btn btn-secondary"> 削除 </a> 
+				<a th:href="@{/info/{id}/delete(id=*{id})}"	class="btn btn-secondary"> 資料無効化 </a> 
 				<a th:href="@{/info/home}" class="btn btn-secondary"> 一覧に戻る </a>
 			</div>
 		</div>

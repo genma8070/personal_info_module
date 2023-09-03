@@ -5,12 +5,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.personal_info_module.contants.Pattern;
+import com.example.personal_info_module.contants.RtnCode;
 import com.example.personal_info_module.entity.PersonalInfo;
-import com.example.personal_info_module.repository.EmployeeInfoDao;
 import com.example.personal_info_module.repository.PersonalInfoDao;
 import com.example.personal_info_module.service.ifs.PersonalInfoService;
 import com.example.personal_info_module.vo.request.PersonalInfoRequest;
@@ -18,13 +21,11 @@ import com.example.personal_info_module.vo.response.FullInfoResponse;
 import com.example.personal_info_module.vo.response.PersonalInfoResponse;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class PersonalInfoServiceImpl implements PersonalInfoService {
 
 	@Autowired
 	private PersonalInfoDao personalInfoDao;
-
-	@Autowired
-	private EmployeeInfoDao employeeInfoDao;
 	
 	@Override
 	public PersonalInfoResponse findInfoP(Integer id) {
@@ -58,7 +59,7 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 					break;
 				case "region":
 					e.setRegion((String) map.get(item));
-					break;			
+					break;
 				case "birth":
 					e.setBirth(((Date) map.get(item)).toLocalDate());
 					break;
@@ -72,7 +73,7 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 					}
 					e.setEndDate(((Date) map.get(item)).toLocalDate());
 					break;
-				
+
 				case "sex":
 					Object value = map.get(item);
 					int intValue = Integer.parseInt(value.toString());
@@ -99,7 +100,6 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 
 	@Override
 	public PersonalInfoResponse addInfo(PersonalInfoRequest req) {
-		Integer id = null;
 		String name = req.getName();
 		String nameKatakana = req.getNameKatakana();
 		String nameRoma = req.getNameRoma();
@@ -113,21 +113,38 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 		LocalDate endDate = null;
 
 		if (name.isEmpty() || nameKatakana.isEmpty() || nameRoma.isEmpty() || region.isEmpty() || age.isEmpty()
-				|| brith == null || startDate == null) {
-			return new PersonalInfoResponse("必填欄位不得有空");
+				|| brith == null || startDate == null || sex == null) {
+			return new PersonalInfoResponse(RtnCode.CANNOT_EMPTY.getType(), RtnCode.CANNOT_EMPTY.getMessage());
 		}
 
-		if (sex == null) {
-			return new PersonalInfoResponse("請選擇性別");
+		if (!name.matches(Pattern.NAME.getPattern())) {
+			return new PersonalInfoResponse(Pattern.NAME.getType(), Pattern.NAME.getMessage());
+		}
+		if (!nameKatakana.matches(Pattern.NAME_KATAKANA.getPattern())) {
+			return new PersonalInfoResponse(Pattern.NAME_KATAKANA.getType(), Pattern.NAME_KATAKANA.getMessage());
+		}
+		if (!nameRoma.matches(Pattern.NAME_ROMA.getPattern())) {
+			return new PersonalInfoResponse(Pattern.NAME_ROMA.getType(), Pattern.NAME_ROMA.getMessage());
+		}
+		if (!region.matches(Pattern.REGION.getPattern())) {
+			return new PersonalInfoResponse(Pattern.REGION.getType(), Pattern.REGION.getMessage());
+		}
+		if (!age.matches(Pattern.AGE.getPattern())) {
+			return new PersonalInfoResponse(Pattern.AGE.getType(), Pattern.AGE.getMessage());
+		}
+		if (!myNumber.isEmpty()) {
+			if (!myNumber.matches(Pattern.MY_NUMBER.getPattern())) {
+				return new PersonalInfoResponse(Pattern.MY_NUMBER.getType(), Pattern.MY_NUMBER.getMessage());
+			}
 		}
 
-		available = (!myNumber.isEmpty());
+		available = (myNumber != null && endDate == null);
 
-		PersonalInfo info = new PersonalInfo(id, myNumber, name, nameKatakana, nameRoma, region, sex, brith, age,
+		PersonalInfo info = new PersonalInfo(myNumber, name, nameKatakana, nameRoma, region, sex, brith, age,
 				startDate, endDate, available);
 		personalInfoDao.save(info);
 
-		return new PersonalInfoResponse("新增成功");
+		return new PersonalInfoResponse(RtnCode.ACCOUNT_CREATE_SUCCESSFUL.getType(), RtnCode.ACCOUNT_CREATE_SUCCESSFUL.getMessage());
 
 	}
 
@@ -147,100 +164,57 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 		LocalDate endDate = req.getEndDate();
 
 		if (name.isEmpty() || nameKatakana.isEmpty() || nameRoma.isEmpty() || region.isEmpty() || age.isEmpty()
-				|| brith == null || startDate == null) {
-			return new PersonalInfoResponse("必填欄位不得有空");
+				|| brith == null || startDate == null || sex == null) {
+			return new PersonalInfoResponse(RtnCode.CANNOT_EMPTY.getType(), RtnCode.CANNOT_EMPTY.getMessage());
 		}
 
-		if (sex == null) {
-			return new PersonalInfoResponse("請選擇性別");
+		if (!name.matches(Pattern.NAME.getPattern())) {
+			return new PersonalInfoResponse(Pattern.NAME.getType(), Pattern.NAME.getMessage());
 		}
+		if (!nameKatakana.matches(Pattern.NAME_KATAKANA.getPattern())) {
+			return new PersonalInfoResponse(Pattern.NAME_KATAKANA.getType(), Pattern.NAME_KATAKANA.getMessage());
+		}
+		if (!nameRoma.matches(Pattern.NAME_ROMA.getPattern())) {
+			return new PersonalInfoResponse(Pattern.NAME_ROMA.getType(), Pattern.NAME_ROMA.getMessage());
+		}
+		if (!region.matches(Pattern.REGION.getPattern())) {
+			return new PersonalInfoResponse(Pattern.REGION.getType(), Pattern.REGION.getMessage());
+		}
+		if (!age.matches(Pattern.AGE.getPattern())) {
+			return new PersonalInfoResponse(Pattern.AGE.getType(), Pattern.AGE.getMessage());
+		}
+		if (!myNumber.isEmpty()) {
+			if (!myNumber.matches(Pattern.MY_NUMBER.getPattern())) {
+				return new PersonalInfoResponse(Pattern.MY_NUMBER.getType(), Pattern.MY_NUMBER.getMessage());
+			}
+		}
+
 		
 		if (endDate == null) {
 			endDate = null;
 		}
-		
+
 		available = (myNumber != null && endDate == null);
-		
 
 		PersonalInfo info = new PersonalInfo(id, myNumber, name, nameKatakana, nameRoma, region, sex, brith, age,
 				startDate, endDate, available);
 		personalInfoDao.save(info);
 
-		return new PersonalInfoResponse("更新成功");
+		return new PersonalInfoResponse(RtnCode.ACCOUNT_EDIT_SUCCESSFUL.getType(), RtnCode.ACCOUNT_EDIT_SUCCESSFUL.getMessage());
 
 	}
 
 	@Override
 	public PersonalInfoResponse deleteInfo(PersonalInfoRequest req) {
-		List<Map<String, Object>> res = personalInfoDao.findInfoById(req.getId());
-		PersonalInfo e = new PersonalInfo();
-		for (Map<String, Object> map : res) {
-
-			for (String item : map.keySet()) {
-				switch (item) {
-				case "id":
-					e.setId((Integer) map.get(item));
-					break;
-				case "my_number":
-					if (map.get(item) == null) {
-						e.setMyNumber(null);
-						break;
-					}
-					e.setMyNumber((String) map.get(item));
-					break;
-				case "age":
-					e.setAge((String) map.get(item));
-					break;
-
-				case "name":
-					e.setName((String) map.get(item));
-					break;
-				case "name_katakana":
-					e.setNameKatakana((String) map.get(item));
-					break;
-				case "name_roma":
-					e.setNameRoma((String) map.get(item));
-					break;
-
-				case "region":
-					e.setRegion((String) map.get(item));
-					break;
-
-				case "birth":
-					e.setBirth(((Date) map.get(item)).toLocalDate());
-					break;
-				case "start_date":
-					e.setStartDate(((Date) map.get(item)).toLocalDate());
-					break;
-				case "end_date":
-					if (map.get(item) == null) {
-						e.setEndDate(null);
-						break;
-					}
-					e.setEndDate(((Date) map.get(item)).toLocalDate());
-					break;
-
-				case "sex":
-					Object value = map.get(item);
-					int intValue = Integer.parseInt(value.toString());
-					if (intValue == 0) {
-						e.setSex(false);
-					} else {
-						e.setSex(true);
-					}
-					break;
-				case "available":
-
-					e.setAvailable(false);
-
-					break;
-
-				}
-			}
+		Optional<PersonalInfo> target = personalInfoDao.findById(req.getId());
+		PersonalInfo info = target.get();
+		if(!info.getAvailable()) {
+			return new PersonalInfoResponse(RtnCode.CANNOT_DELETE.getType(), RtnCode.CANNOT_DELETE.getMessage());
 		}
-		personalInfoDao.save(e);
+		info.setAvailable(false);
+		personalInfoDao.save(info);
 
-		return new PersonalInfoResponse("刪除成功");
+		return new PersonalInfoResponse(RtnCode.ACCOUNT_DELETE_SUCCESSFUL.getType(), RtnCode.ACCOUNT_DELETE_SUCCESSFUL.getMessage());
 
 	}
 
@@ -442,7 +416,7 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 			eList.add(e);
 		}
 		if (eList.size() == 0) {
-			return new FullInfoResponse("查無資料");
+			return new FullInfoResponse(RtnCode.NOT_FOUND.getType(), RtnCode.NOT_FOUND.getMessage());
 		}
 		return new FullInfoResponse(eList);
 	}
@@ -643,7 +617,7 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 
 		}
 
-		return new FullInfoResponse(e);
+		return e;
 	}
 
 	@Override
@@ -1038,7 +1012,6 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 					} else {
 						e.setResidentCardStatus(null);
 					}
-
 					break;
 				}
 			}
@@ -1047,7 +1020,7 @@ public class PersonalInfoServiceImpl implements PersonalInfoService {
 		}
 
 		if (eList.size() == 0) {
-			return new FullInfoResponse("查無資料");
+			return new FullInfoResponse(RtnCode.NOT_FOUND.getType(), RtnCode.NOT_FOUND.getMessage());
 		}
 		return new FullInfoResponse(eList);
 	}

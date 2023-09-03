@@ -7,7 +7,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.personal_info_module.contants.Pattern;
+import com.example.personal_info_module.contants.RtnCode;
 import com.example.personal_info_module.entity.EmployeeInfo;
 import com.example.personal_info_module.repository.EmployeeInfoDao;
 import com.example.personal_info_module.service.ifs.EmployeeInfoService;
@@ -15,11 +18,12 @@ import com.example.personal_info_module.vo.request.EmployeeInfoRequest;
 import com.example.personal_info_module.vo.response.EmployeeInfoResponse;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class EmployeeInfoServiceImpl implements EmployeeInfoService {
 
 	@Autowired
 	private EmployeeInfoDao employeeInfoDao;
-
+	
 	public EmployeeInfoResponse findInfoF(Integer id) {
 
 		List<Map<String, Object>> res = employeeInfoDao.findEReqById(id);
@@ -168,7 +172,7 @@ public class EmployeeInfoServiceImpl implements EmployeeInfoService {
 		Integer id = null;
 		String officeMail = req.getOfficeMail();
 		String otherMail = req.getOtherMail();
-		String adress = req.getAddress();
+		String address = req.getAddress();
 		String bankName = req.getBankName();
 		String headquarters = req.getHeadquarters();
 		Boolean residentCardStatus = req.getResidentCardStatus();
@@ -186,11 +190,11 @@ public class EmployeeInfoServiceImpl implements EmployeeInfoService {
 
 		EmployeeInfo info = new EmployeeInfo(id, passportNumber, passportLimitDate, residentCardNumber,
 				residentCardStartDate, residentCardEndDate, residentCardStatus, telephone, cellphone, officeMail,
-				otherMail, postCode, adress, employmentInsuranceNumber, pensionNumber, bankName, headquarters,
+				otherMail, postCode, address, employmentInsuranceNumber, pensionNumber, bankName, headquarters,
 				bankAccountNumber);
 		employeeInfoDao.save(info);
 
-		return new EmployeeInfoResponse("新增成功");
+		return new EmployeeInfoResponse(RtnCode.ACCOUNT_CREATE_SUCCESSFUL.getMessage());
 
 	}
 
@@ -199,7 +203,7 @@ public class EmployeeInfoServiceImpl implements EmployeeInfoService {
 		Integer id = req.getId();
 		String officeMail = req.getOfficeMail();
 		String otherMail = req.getOtherMail();
-		String adress = req.getAddress();
+		String address = req.getAddress();
 		String bankName = req.getBankName();
 		String headquarters = req.getHeadquarters();
 		Boolean residentCardStatus = req.getResidentCardStatus();
@@ -215,21 +219,70 @@ public class EmployeeInfoServiceImpl implements EmployeeInfoService {
 		LocalDate residentCardStartDate = req.getResidentCardStartDate();
 		LocalDate residentCardEndDate = req.getResidentCardEndDate();
 
-		if (officeMail == null || adress == null || bankName == null || headquarters == null
+		if (officeMail == null || address == null || bankName == null || headquarters == null
 				|| residentCardStatus == null || postCode == null || employmentInsuranceNumber == null
 				|| pensionNumber == null || bankAccountNumber == null || telephone == null || cellphone == null
 				|| passportNumber == null || residentCardNumber == null || passportLimitDate == null
 				|| residentCardStartDate == null || residentCardEndDate == null) {
-			return new EmployeeInfoResponse("必填欄位不得有空");
+			return new EmployeeInfoResponse(RtnCode.CANNOT_EMPTY.getType(), RtnCode.CANNOT_EMPTY.getMessage());
 		}
+		
+//		if (otherMail.isEmpty() || officeMail.isEmpty() || address.isEmpty() || bankName.isEmpty() || headquarters.isEmpty()
+//				|| residentCardStatus == null || postCode.isEmpty() || employmentInsuranceNumber.isEmpty()
+//				|| pensionNumber.isEmpty() || bankAccountNumber.isEmpty() || telephone.isEmpty() || cellphone.isEmpty()
+//				|| passportNumber.isEmpty() || residentCardNumber.isEmpty() || passportLimitDate == null
+//				|| residentCardStartDate == null || residentCardEndDate == null) {
+//			return new EmployeeInfoResponse(RtnCode.CANNOT_EMPTY.getMessage());
+//		}
+		
+		if (!officeMail.matches(Pattern.MAIL.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.MAIL.getType(), Pattern.MAIL.getMessage());
+		}
+		if (!otherMail.matches(Pattern.MAIL.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.MAIL.getType(), Pattern.MAIL.getMessage());
+		}
+		if (!address.matches(Pattern.ADDRESS.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.ADDRESS.getType(), Pattern.ADDRESS.getMessage());
+		}
+		if (!bankAccountNumber.matches(Pattern.BANK_ACCOUNT_NUMBER.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.BANK_ACCOUNT_NUMBER.getType(), Pattern.BANK_ACCOUNT_NUMBER.getMessage());
+		}
+		if (!bankName.matches(Pattern.BANK_NAME.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.BANK_NAME.getType(), Pattern.BANK_NAME.getMessage());
+		}
+		if (!cellphone.matches(Pattern.CELLPHONE.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.CELLPHONE.getType(), Pattern.CELLPHONE.getMessage());
+		}
+		if (!telephone.matches(Pattern.TELEPHONE.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.TELEPHONE.getType(), Pattern.TELEPHONE.getMessage());
+		}
+		if (!residentCardNumber.matches(Pattern.RESIDENT_CARD_NUMBER.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.RESIDENT_CARD_NUMBER.getType(), Pattern.RESIDENT_CARD_NUMBER.getMessage());
+		}
+		if (!pensionNumber.matches(Pattern.PENSION_NUMBER.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.PENSION_NUMBER.getType(), Pattern.PENSION_NUMBER.getMessage());
+		}
+		if (!passportNumber.matches(Pattern.PASSPORT_NUMBER.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.PASSPORT_NUMBER.getType(), Pattern.PASSPORT_NUMBER.getMessage());
+		}
+		if (!headquarters.matches(Pattern.HEADQUARTERS.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.HEADQUARTERS.getType(), Pattern.HEADQUARTERS.getMessage());
+		}
+		if (!postCode.matches(Pattern.POST_CODE.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.POST_CODE.getType(), Pattern.POST_CODE.getMessage());
+		}
+		if (!employmentInsuranceNumber.matches(Pattern.EMPLOYMENT_INSURANCE_NUMBER.getPattern())) {
+		    return new EmployeeInfoResponse(Pattern.EMPLOYMENT_INSURANCE_NUMBER.getType(), Pattern.EMPLOYMENT_INSURANCE_NUMBER.getMessage());
+		}
+		
 
 		EmployeeInfo info = new EmployeeInfo(id, passportNumber, passportLimitDate, residentCardNumber,
 				residentCardStartDate, residentCardEndDate, residentCardStatus, telephone, cellphone, officeMail,
-				otherMail, postCode, adress, employmentInsuranceNumber, pensionNumber, bankName, headquarters,
+				otherMail, postCode, address, employmentInsuranceNumber, pensionNumber, bankName, headquarters,
 				bankAccountNumber);
 		employeeInfoDao.save(info);
 
-		return new EmployeeInfoResponse("更新成功");
+		return new EmployeeInfoResponse(RtnCode.ACCOUNT_EDIT_SUCCESSFUL.getType(), RtnCode.ACCOUNT_EDIT_SUCCESSFUL.getMessage());
 
 	}
 

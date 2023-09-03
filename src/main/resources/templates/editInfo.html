@@ -7,125 +7,131 @@
 
 <div class="container-fluid">
     <h1>個人情報更新</h1>
+      <div th:if="${personalInfoResponse}" th:object="${personalInfoResponse}">
+      		<label class="text-danger" th:text="*{message}"></label>
+  		 </div>
+    	<div th:if="${employeeInfoResponse}" th:object="${employeeInfoResponse}">
+      		<label class="text-danger" th:text="*{message}"></label>
+  		</div>
+  		
     <div>
 
-        <form th:action="@{/info/{id}/edit/update(id=${personalInfo.id})}" th:method="post" class="row justify-content-center mt-5 ">
+        <form th:action="@{/info/{id}/edit/update(id=${personalInfoRequest.id})}" th:method="post" class="row justify-content-center mt-5 ">
 
-            <div th:object="${personalInfo}"
+            <div th:object="${personalInfoRequest}"
                 
                  class="col-10 border border-dark d-flex flex-column p-0">
                 <div class="col border border-primary border-3 bg-light text-center">基本情報</div>
 
-                <label class="ms-2">マイナンバー：<span class="text-danger">※入社してから記入,記入して登録する場合更新画面に移動</span></label>
-                <input type="text" th:field="${personalInfo.myNumber}"  class="mx-3">
+                <label class="ms-2">マイナンバー：<span class="text-danger">※入社してから記入,記入して更新する場合は引き続き社員情報を記入してください</span></label>
+                <input type="text" th:field="${personalInfoRequest.myNumber}"  class="mx-3">
 
                 <label class="ms-2">名前：<span class="text-danger">※</span></label>
-                <input type="text" th:field="${personalInfo.name}" th:value="${personalInfo.name}" class="mx-3">
+                <input type="text" th:field="${personalInfoRequest.name}" th:value="${personalInfoRequest.name}" class="mx-3">
 
                 <label class="ms-2">名前（カタカナ）：<span class="text-danger">※</span></label>
-                <input type="text" th:field="${personalInfo.nameKatakana}" class="mx-3">
+                <input type="text" th:field="${personalInfoRequest.nameKatakana}" class="mx-3">
 
                 <label class="ms-2">名前（ローマ字）：<span class="text-danger">※</span></label>
-                <input type="text" th:field="${personalInfo.nameRoma}" class="mx-3">
+                <input type="text" th:field="${personalInfoRequest.nameRoma}" class="mx-3">
 
                 <label class="ms-2">国籍:<span class="text-danger">※</span></label>
-                <input type="text" th:field="${personalInfo.region}" class="mx-3">
+                <input type="text" th:field="${personalInfoRequest.region}" class="mx-3">
 
                 <label class="ms-2">性別：<span class="text-danger">※</span></label>
-                    <select th:field="${personalInfo.sex}" class="mx-3">
+                    <select th:field="${personalInfoRequest.sex}" class="mx-3">
 						<option th:value="true" selected>男性</option>
 						<option th:value="false">女性</option>
 					</select>
 
                 <label class="ms-2">生年月日：<span class="text-danger">※</span></label>
-                <input type="date" th:field="${personalInfo.birth}" class="mx-3">
+                <input type="date" th:field="${personalInfoRequest.birth}" class="mx-3">
 
                 <label class="ms-2">年齢:<span class="text-danger">※</span></label>
-                <input type="text" th:field="${personalInfo.age}" class="mx-3">
+                <input type="text" th:field="${personalInfoRequest.age}" class="mx-3">
 
                 <label class="ms-2">入社日：<span class="text-danger">※</span></label>
-                <input type="date" th:field="${personalInfo.startDate}" class="mx-3">
+                <input type="date" th:field="${personalInfoRequest.startDate}" class="mx-3">
 
                 <label class="ms-2">退職日：<span class="text-danger"></span></label>
-                <input type="date" th:field="${personalInfo.endDate}" class="mx-3 ">
+                <input type="date" th:field="${personalInfoRequest.endDate}" class="mx-3 ">
                 
-				<label class="ms-2">在籍状況：<span class="text-danger"></span></label>                
-                	<select th:field="${personalInfo.available}" class="mx-3 mb-2">
-   						 <option th:value="true" th:text="在籍中">在籍中</option>
-   						 <option th:value="false" th:text="未在籍">未在籍</option>
-					</select>
+				<label class="ms-2">在籍状況：<span class="text-danger"></span></label>  
+				<div class="mx-3 mb-2 border border-dark border-1" th:if="*{available}" th:text="在籍中"></div>
+				<div class="mx-3 mb-2 border border-dark border-1" th:if="!*{available}" th:text="未在籍"></div>
+                
             </div>
 
-            <div th:object="${employeeInfo}"
+            <div th:object="${employeeInfoRequest}"
                  
                  class="col-10 border border-dark d-flex flex-column p-0">
                 <div class="col border border-primary border-3 bg-light text-center">連絡先</div>
 
                 <label class="ms-2">固定電話：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.telephone}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.telephone}" class="mx-3">
 
                 <label class="ms-2">携帯電話：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.cellphone}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.cellphone}" class="mx-3">
 
                 <label class="ms-2">メールアドレス（社内）：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.officeMail}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.officeMail}" class="mx-3">
 
                 <label class="ms-2">メールアドレス（その他）：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.otherMail}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.otherMail}" class="mx-3">
 
                 <label class="ms-2">郵便番号：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.postCode}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.postCode}" class="mx-3">
 
                 <label class="ms-2">住所：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.address}" class="mx-3 mb-2">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.address}" class="mx-3 mb-2">
             </div>
 
-            <div th:object="${employeeInfo}"
+            <div th:object="${employeeInfoRequest}"
                  
                  class="col-10 border border-dark d-flex flex-column p-0">
                 <div class="col border border-primary border-3 bg-light text-center">在留情報</div>
 
                 <label class="ms-2">パスポート番号：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.passportNumber}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.passportNumber}" class="mx-3">
 
                 <label class="ms-2">パスポート期限：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="date" th:field="${employeeInfo.passportLimitDate}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="date" th:field="${employeeInfoRequest.passportLimitDate}" class="mx-3">
 
                 <label class="ms-2">在留カード番号：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.residentCardNumber}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.residentCardNumber}" class="mx-3">
 
                 <label class="ms-2">在留カード開始日：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="date" th:field="${employeeInfo.residentCardStartDate}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="date" th:field="${employeeInfoRequest.residentCardStartDate}" class="mx-3">
 
                 <label class="ms-2">在留カード終了日：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="date" th:field="${employeeInfo.residentCardEndDate}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="date" th:field="${employeeInfoRequest.residentCardEndDate}" class="mx-3">
 
                 <label class="ms-2">在留資格：<span class="text-danger">※入社してから記入</span></label>
-                <select th:disabled="!${personalInfo.available}" th:field="${employeeInfo.residentCardStatus}" class="mx-3 mb-2">
+                <select th:disabled="!${personalInfoRequest.available}" th:field="${employeeInfoRequest.residentCardStatus}" class="mx-3 mb-2">
 						<option th:value="true">有効</option>
 						<option th:value="false" selected>無効</option>
 					</select>
             </div>
 
-            <div th:object="${employeeInfo}"
+            <div th:object="${employeeInfoRequest}"
                  
                  class="col-10 border border-dark d-flex flex-column p-0">
                 <div class="col border border-primary border-3 bg-light text-center">給付情報</div>
 
                 <label class="ms-2">雇用保険番号：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.employmentInsuranceNumber}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.employmentInsuranceNumber}" class="mx-3">
 
                 <label class="ms-2">年金番号：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.pensionNumber}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.pensionNumber}" class="mx-3">
 
                 <label class="ms-2">銀行名称：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.bankName}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.bankName}" class="mx-3">
 
                 <label class="ms-2">本店名：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.headquarters}" class="mx-3">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.headquarters}" class="mx-3">
 
                 <label class="ms-2">口座番号：<span class="text-danger">※入社してから記入</span></label>
-                <input th:disabled="!${personalInfo.available}" type="text" th:field="${employeeInfo.bankAccountNumber}" class="mx-3 mb-2">
+                <input th:disabled="!${personalInfoRequest.available}" type="text" th:field="${employeeInfoRequest.bankAccountNumber}" class="mx-3 mb-2">
             </div>
 
             <div class="text-center mt-3 mb-2">

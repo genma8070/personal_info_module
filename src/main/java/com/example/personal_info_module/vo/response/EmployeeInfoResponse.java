@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import com.example.personal_info_module.vo.request.EmployeeInfoRequest;
 
 public class EmployeeInfoResponse {
-
 	
 	private EmployeeInfoRequest reqE;
 	
@@ -45,7 +44,9 @@ public class EmployeeInfoResponse {
 
 	private String bankAccountNumber;
 	
-	private String massage;
+	private Boolean messageType;
+	
+	private String message;
 
 	public Integer getId() {
 		return id;
@@ -191,19 +192,19 @@ public class EmployeeInfoResponse {
 		this.bankAccountNumber = bankAccountNumber;
 	}
 
-	public String getMassage() {
-		return massage;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setMassage(String massage) {
-		this.massage = massage;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public EmployeeInfoResponse(Integer id, String passportNumber, LocalDate passportLimitDate,
 			String residentCardNumber, LocalDate residentCardStartDate, LocalDate residentCardEndDate,
 			Boolean residentCardStatus, String telephone, String cellphone, String officeMail, String otherMail,
 			String postCode, String address, String employmentInsuranceNumber, String pensionNumber, String bankName,
-			String headquarters, String bankAccountNumber, String massage) {
+			String headquarters, String bankAccountNumber, String message) {
 		super();
 		this.id = id;
 		this.passportNumber = passportNumber;
@@ -223,7 +224,7 @@ public class EmployeeInfoResponse {
 		this.bankName = bankName;
 		this.headquarters = headquarters;
 		this.bankAccountNumber = bankAccountNumber;
-		this.massage = massage;
+		this.message = message;
 	}
 
 	public EmployeeInfoResponse() {
@@ -257,9 +258,9 @@ public class EmployeeInfoResponse {
 		this.bankAccountNumber = bankAccountNumber;
 	}
 
-	public EmployeeInfoResponse(String massage) {
+	public EmployeeInfoResponse(String message) {
 		super();
-		this.massage = massage;
+		this.message = message;
 	}
 
 	public EmployeeInfoRequest getReqE() {
@@ -273,6 +274,50 @@ public class EmployeeInfoResponse {
 	public EmployeeInfoResponse(EmployeeInfoRequest reqE) {
 		super();
 		this.reqE = reqE;
+	}
+
+	public Boolean getMessageType() {
+		return messageType;
+	}
+
+	public void setMessageType(Boolean messageType) {
+		this.messageType = messageType;
+	}
+
+	public EmployeeInfoResponse(Boolean messageType, String message) {
+		super();
+		this.messageType = messageType;
+		this.message = message;
+	}
+
+	public EmployeeInfoResponse(EmployeeInfoRequest reqE, Integer id, String passportNumber,
+			LocalDate passportLimitDate, String residentCardNumber, LocalDate residentCardStartDate,
+			LocalDate residentCardEndDate, Boolean residentCardStatus, String telephone, String cellphone,
+			String officeMail, String otherMail, String postCode, String address, String employmentInsuranceNumber,
+			String pensionNumber, String bankName, String headquarters, String bankAccountNumber, Boolean messageType,
+			String message) {
+		super();
+		this.reqE = reqE;
+		this.id = id;
+		this.passportNumber = passportNumber;
+		this.passportLimitDate = passportLimitDate;
+		this.residentCardNumber = residentCardNumber;
+		this.residentCardStartDate = residentCardStartDate;
+		this.residentCardEndDate = residentCardEndDate;
+		this.residentCardStatus = residentCardStatus;
+		this.telephone = telephone;
+		this.cellphone = cellphone;
+		this.officeMail = officeMail;
+		this.otherMail = otherMail;
+		this.postCode = postCode;
+		this.address = address;
+		this.employmentInsuranceNumber = employmentInsuranceNumber;
+		this.pensionNumber = pensionNumber;
+		this.bankName = bankName;
+		this.headquarters = headquarters;
+		this.bankAccountNumber = bankAccountNumber;
+		this.messageType = messageType;
+		this.message = message;
 	}
 	
 }

@@ -34,6 +34,8 @@ public class PersonalInfoResponse {
 	
 	private PersonalInfoRequest reqP;
 	
+	private Boolean messageType;
+	
 	private String message;
 
 	public Integer getId() {
@@ -198,6 +200,41 @@ public class PersonalInfoResponse {
 	public PersonalInfoResponse(PersonalInfoRequest reqP) {
 		super();
 		this.reqP = reqP;
+	}
+
+	public Boolean getMessageType() {
+		return messageType;
+	}
+
+	public void setMessageType(Boolean messageType) {
+		this.messageType = messageType;
+	}
+
+	public PersonalInfoResponse(Boolean messageType, String message) {
+		super();
+		this.messageType = messageType;
+		this.message = message;
+	}
+
+	public PersonalInfoResponse(Integer id, String myNumber, String name, String nameKatakana, String nameRoma,
+			String region, Boolean sex, LocalDate birth, String age, LocalDate startDate, LocalDate endDate,
+			Boolean available, PersonalInfoRequest reqP, Boolean messageType, String message) {
+		super();
+		this.id = id;
+		this.myNumber = myNumber;
+		this.name = name;
+		this.nameKatakana = nameKatakana;
+		this.nameRoma = nameRoma;
+		this.region = region;
+		this.sex = sex;
+		this.birth = birth;
+		this.age = age;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.available = available;
+		this.reqP = reqP;
+		this.messageType = messageType;
+		this.message = message;
 	}
 
 	

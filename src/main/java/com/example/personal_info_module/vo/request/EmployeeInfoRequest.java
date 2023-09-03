@@ -25,7 +25,7 @@ public class EmployeeInfoRequest {
 	private Boolean residentCardStatus;
 
 	private String telephone;
-
+	
 	private String cellphone;
 
 	private String officeMail;

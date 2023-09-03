@@ -168,5 +168,21 @@ public class PersonalInfo {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	public PersonalInfo(String myNumber, String name, String nameKatakana, String nameRoma, String region, Boolean sex,
+			LocalDate birth, String age, LocalDate startDate, LocalDate endDate, Boolean available) {
+		super();
+		this.myNumber = myNumber;
+		this.name = name;
+		this.nameKatakana = nameKatakana;
+		this.nameRoma = nameRoma;
+		this.region = region;
+		this.sex = sex;
+		this.birth = birth;
+		this.age = age;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.available = available;
+	}
 	
 }

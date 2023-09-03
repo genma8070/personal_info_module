@@ -17,7 +17,9 @@ import com.example.personal_info_module.service.ifs.EmployeeInfoService;
 import com.example.personal_info_module.service.ifs.PersonalInfoService;
 import com.example.personal_info_module.vo.request.EmployeeInfoRequest;
 import com.example.personal_info_module.vo.request.PersonalInfoRequest;
+import com.example.personal_info_module.vo.response.EmployeeInfoResponse;
 import com.example.personal_info_module.vo.response.FullInfoResponse;
+import com.example.personal_info_module.vo.response.PersonalInfoResponse;
 
 @Controller
 public class ModuleController {
@@ -39,6 +41,9 @@ public class ModuleController {
 
 		PersonalInfoRequest req = new PersonalInfoRequest();
 		model.addAttribute("searchRequest", req);
+
+		model.addAttribute("personalInfoRequest", req);
+		model.addAttribute("employeeInfoRequest", new EmployeeInfoRequest());
 
 		return "infoMenu";
 	}
@@ -67,27 +72,34 @@ public class ModuleController {
 	}
 
 	@RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
-	public String moreInfo(@PathVariable Integer id, Model model) {
+	public String moreInfo(@ModelAttribute PersonalInfoResponse personalInfoResponse, @PathVariable Integer id,
+			Model model) {
 
 		FullInfoResponse target = personalInfoService.findInfoById(id);
 		model.addAttribute("allInfo", target);
 		model.addAttribute("category", 0);
-
+		if (personalInfoResponse != null) {
+			model.addAttribute("PersonalInfoResponse", personalInfoResponse);
+		}
 		return "allInfo";
 	}
 
 	@RequestMapping(value = "/info/{id}/delete", method = RequestMethod.GET)
-	public String deleteInfo(@PathVariable Integer id, Model model) {
+	public String deleteInfo(RedirectAttributes redirectAttributes, @PathVariable Integer id, Model model) {
 
 		PersonalInfoRequest req = new PersonalInfoRequest();
 		req.setId(id);
-		personalInfoService.deleteInfo(req);
+		PersonalInfoResponse p = personalInfoService.deleteInfo(req);
+		if (!p.getMessageType()) {
+			redirectAttributes.addFlashAttribute("personalInfoResponse", p);
+			return "redirect:/info/{id}";
+		}
 
 		FullInfoResponse target = personalInfoService.findInfoById(id);
 
 		model.addAttribute("allInfo", target);
 		model.addAttribute("category", 0);
-
+		model.addAttribute("personalInfoResponse", p);
 		return "allInfo";
 	}
 
@@ -105,12 +117,23 @@ public class ModuleController {
 	}
 
 	@RequestMapping(value = "/info/add", method = RequestMethod.GET)
-	public String addInfo(Model model) {
-		PersonalInfoRequest req = new PersonalInfoRequest();
-		req.setAvailable(false);
+	public String addInfo(RedirectAttributes redirectAttributes,
+			@ModelAttribute PersonalInfoRequest personalInfoRequest,
+			@ModelAttribute EmployeeInfoRequest employeeInfoRequest, Model model) {
 
-		model.addAttribute("personalInfoRequest", req);
-		model.addAttribute("employeeInfoRequest", new EmployeeInfoRequest());
+		if (personalInfoRequest.getName() != null) {
+			model.addAttribute("personalInfoRequest", personalInfoRequest);
+			if (employeeInfoRequest.getPostCode() != null) {
+				model.addAttribute("employeeInfoRequest", employeeInfoRequest);
+			}
+			return "addInfo";
+		} else {
+			PersonalInfoRequest req = new PersonalInfoRequest();
+			req.setAvailable(false);
+
+			model.addAttribute("personalInfoRequest", req);
+			model.addAttribute("employeeInfoRequest", new EmployeeInfoRequest());
+		}
 
 		return "addInfo";
 	}
@@ -121,15 +144,36 @@ public class ModuleController {
 			Model model) {
 		if (personalInfoRequest.getMyNumber().isEmpty()) {
 
-			personalInfoService.addInfo(personalInfoRequest);
+			PersonalInfoResponse p = personalInfoService.addInfo(personalInfoRequest);
+			if (!p.getMessageType()) {
+				redirectAttributes.addFlashAttribute("personalInfoResponse", p);
+				redirectAttributes.addFlashAttribute("personalInfoRequest", personalInfoRequest);
+				redirectAttributes.addFlashAttribute("employeeInfoRequest", employeeInfoRequest);
+
+				return "redirect:/info/add";
+			}
+
 			employeeInfoService.addInfo(employeeInfoRequest);
-			PersonalInfoRequest req = new PersonalInfoRequest();
-			model.addAttribute("searchRequest", req);
+			model.addAttribute("searchRequest", new PersonalInfoRequest());
 			return "redirect:/info/home";
 		} else {
+			PersonalInfoResponse p = personalInfoService.addInfo(personalInfoRequest);
 
-			personalInfoService.addInfo(personalInfoRequest);
-			employeeInfoService.addInfo(employeeInfoRequest);
+			if (!p.getMessageType()) {
+				redirectAttributes.addFlashAttribute("personalInfoResponse", p);
+				redirectAttributes.addFlashAttribute("personalInfoRequest", personalInfoRequest);
+				redirectAttributes.addFlashAttribute("employeeInfoRequest", employeeInfoRequest);
+
+				return "redirect:/info/add";
+			}
+			EmployeeInfoResponse e = employeeInfoService.addInfo(employeeInfoRequest);
+			if (!e.getMessageType()) {
+				redirectAttributes.addFlashAttribute("employeeInfoResponse", e);
+				redirectAttributes.addFlashAttribute("personalInfoRequest", personalInfoRequest);
+				redirectAttributes.addFlashAttribute("employeeInfoRequest", employeeInfoRequest);
+
+				return "redirect:/info/add";
+			}
 			personalInfoRequest.setAvailable(true);
 
 			FullInfoResponse target = personalInfoService.getNewstInfo();
@@ -148,57 +192,80 @@ public class ModuleController {
 	}
 
 	@RequestMapping(value = "/info/{id}/edit", method = RequestMethod.GET)
-	public String eidtInfo(RedirectAttributes redirectAttributes,@PathVariable Integer id, Model model) {
-
-		PersonalInfoRequest infoP = personalInfoService.findInfoP(id).getReqP();
-		EmployeeInfoRequest infoE = employeeInfoService.findInfoF(id).getReqE();
-
-		model.addAttribute("personalInfo", infoP);
-		model.addAttribute("employeeInfo", infoE);
-		redirectAttributes.addFlashAttribute("personalInfo", infoP);
-		redirectAttributes.addFlashAttribute("employeeInfo", infoE);
-		return "editInfo";
+	public String eidtInfo(@ModelAttribute PersonalInfoRequest personalInfoRequest,
+			@ModelAttribute EmployeeInfoRequest employeeInfoRequest, RedirectAttributes redirectAttributes,
+			@PathVariable Integer id, Model model) {
+		System.out.println(personalInfoRequest.getAvailable());
+		if (personalInfoRequest.getName() != null) {
+			model.addAttribute("personalInfoRequest", personalInfoRequest);
+			model.addAttribute("employeeInfoRequest", employeeInfoRequest);
+			return "editInfo";
+		} else {
+			PersonalInfoRequest infoP = personalInfoService.findInfoP(id).getReqP();
+			EmployeeInfoRequest infoE = employeeInfoService.findInfoF(id).getReqE();
+			model.addAttribute("personalInfoRequest", infoP);
+			model.addAttribute("employeeInfoRequest", infoE);
+			redirectAttributes.addFlashAttribute("personalInfoRequest", infoP);
+			redirectAttributes.addFlashAttribute("employeeInfoRequest", infoE);
+			System.out.println(((PersonalInfoRequest) model.getAttribute("personalInfoRequest")).getAvailable());
+			return "editInfo";
+		}
 	}
 
-	@RequestMapping(value = "/info/{id}/edit/more", method = RequestMethod.GET)
-	public String editMoreInfo(@PathVariable Integer id, Model model) {
-		PersonalInfoRequest infoP = personalInfoService.findInfoP(id).getReqP();
-		EmployeeInfoRequest infoE = employeeInfoService.findInfoF(id).getReqE();
-
-		model.addAttribute("personalInfo", infoP);
-		model.addAttribute("employeeInfo", infoE);
-		System.out.println(infoP.getMyNumber());
-		System.out.println(infoP.getAvailable());
-
-		return "editInfo";
-	}
+//	@RequestMapping(value = "/info/{id}/edit/more", method = RequestMethod.GET)
+//	public String editMoreInfo(@ModelAttribute PersonalInfoRequest personalInfoRequest,
+//			@ModelAttribute EmployeeInfoRequest employeeInfoRequest, RedirectAttributes redirectAttributes,
+//			@PathVariable Integer id, Model model) {
+//		System.out.println(personalInfoRequest.getAvailable());
+//		if (personalInfoRequest.getName() != null) {
+//			System.out.println(4);
+//			
+//			model.addAttribute("personalInfoRequest", personalInfoRequest);
+//			model.addAttribute("employeeInfoRequest", employeeInfoRequest);
+//			redirectAttributes.addFlashAttribute("personalInfoRequest", personalInfoRequest);
+//			redirectAttributes.addFlashAttribute("employeeInfoRequest", employeeInfoRequest);
+//			return "editInfo";
+//		} else {
+//			PersonalInfoRequest infoP = personalInfoService.findInfoP(id).getReqP();
+//			EmployeeInfoRequest infoE = employeeInfoService.findInfoF(id).getReqE();
+//			model.addAttribute("personalInfoRequest", infoP);
+//			model.addAttribute("employeeInfoRequest", infoE);
+//			redirectAttributes.addFlashAttribute("personalInfoRequest", infoP);
+//			redirectAttributes.addFlashAttribute("employeeInfoRequest", infoE);
+//			
+//			return "editInfo";
+//		}
+//	}
 
 	@RequestMapping(value = "/info/{id}/edit/update", method = RequestMethod.POST)
-	public String updateInfo(@ModelAttribute PersonalInfoRequest personalInfo,@ModelAttribute EmployeeInfoRequest employeeInfo, RedirectAttributes redirectAttributes,
+	public String updateInfo(@ModelAttribute PersonalInfoRequest personalInfoRequest,
+			@ModelAttribute EmployeeInfoRequest employeeInfoRequest, RedirectAttributes redirectAttributes,
 			@PathVariable Integer id, Model model) {
-		
-		if (personalInfo.getMyNumber().isEmpty()) {
-			personalInfoService.updateInfo(personalInfo);
-
-			redirectAttributes.addFlashAttribute("searchRequest", new PersonalInfoRequest());
-			return "redirect:/info/home";
+		System.out.println(personalInfoRequest.getAvailable());
+		PersonalInfoResponse p = personalInfoService.updateInfo(personalInfoRequest);
+		if (!p.getMessageType()) {
 			
-		} else if(!(personalInfo.getMyNumber().isEmpty()) && !(personalInfo.getAvailable())){
-
-			personalInfoService.updateInfo(personalInfo);
-			employeeInfoService.updateInfo(employeeInfo);
-			personalInfo.setAvailable(true);
-
-			redirectAttributes.addFlashAttribute("personalInfo", personalInfo);
-			redirectAttributes.addFlashAttribute("employeeInfo", employeeInfo);
-			return "redirect:/info/" + id + "/edit/more";
-		} else {
-			personalInfoService.updateInfo(personalInfo);
-			employeeInfoService.updateInfo(employeeInfo);
-			
-			redirectAttributes.addFlashAttribute("searchRequest", new PersonalInfoRequest());
-			return "redirect:/info/home" ;
+			redirectAttributes.addFlashAttribute("personalInfoResponse", p);
+			redirectAttributes.addFlashAttribute("personalInfoRequest", personalInfoRequest);
+			EmployeeInfoRequest infoE = employeeInfoService.findInfoF(id).getReqE();
+			redirectAttributes.addFlashAttribute("employeeInfoRequest", infoE);
+			return "redirect:/info/" + id + "/edit";
 		}
-		
+		personalInfoRequest.setAvailable(true);
+		EmployeeInfoResponse e = employeeInfoService.updateInfo(employeeInfoRequest);
+		if (!e.getMessageType()) {
+			PersonalInfoRequest infoP = personalInfoService.findInfoP(id).getReqP();
+			EmployeeInfoRequest infoE = employeeInfoService.findInfoF(id).getReqE();
+			model.addAttribute("personalInfoRequest", infoP);
+			model.addAttribute("employeeInfoRequest", infoE);
+			redirectAttributes.addFlashAttribute("employeeInfoResponse", e);
+			redirectAttributes.addFlashAttribute("personalInfoRequest", personalInfoRequest);
+			redirectAttributes.addFlashAttribute("employeeInfoRequest", employeeInfoRequest);
+			return "redirect:/info/" + id + "/edit";
+		}
+
+		redirectAttributes.addFlashAttribute("searchRequest", new PersonalInfoRequest());
+		return "redirect:/info/home";
+
 	}
 }

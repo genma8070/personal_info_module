@@ -7,6 +7,13 @@
 
 <div class="container-fluid">
     <h1>新規個人情報</h1>
+     <div th:if="${personalInfoResponse}" th:object="${personalInfoResponse}">
+      		<label class="text-danger" th:text="*{message}"></label>
+  		 </div>
+    	<div th:if="${employeeInfoResponse}" th:object="${employeeInfoResponse}">
+      		<label class="text-danger" th:text="*{message}"></label>
+  		</div>
+  		
     <div>
 
         <form th:action="@{/info/new}" th:method="post" class="row justify-content-center mt-5 ">
@@ -16,7 +23,7 @@
                  class="col-10 border border-dark d-flex flex-column p-0">
                 <div class="col border border-primary border-3 bg-light text-center">基本情報</div>
 
-                <label class="ms-2">マイナンバー：<span class="text-danger">※入社してから記入,記入して登録する場合更新画面に移動</span></label>
+                <label class="ms-2">マイナンバー：<span class="text-danger">※入社してから記入,,記入して登録する場合は引き続き社員情報を記入してください</span></label>
                 <input type="text" th:field="${personalInfoRequest.myNumber}"  class="mx-3">
 
                 <label class="ms-2">名前：<span class="text-danger">※</span></label>
@@ -95,7 +102,7 @@
                 <input th:disabled="!${personalInfoRequest.available}" type="date" th:field="${employeeInfoRequest.residentCardEndDate}" class="mx-3">
 
                 <label class="ms-2">在留資格：<span class="text-danger">※入社してから記入</span></label>
-                <select th:disabled="!${personalInfoRequest.available}" th:field="${employeeInfoRequest.residentCardStatus}" class="mx-3">
+                <select th:disabled="!${personalInfoRequest.available}" th:field="${employeeInfoRequest.residentCardStatus}" class="mx-3 mb-2">
 						<option th:value="true">有効</option>
 						<option th:value="false" selected>無効</option>
 					</select>

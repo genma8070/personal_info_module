@@ -70,6 +70,8 @@ public class FullInfoResponse {
 
 	private String bankAccountNumber;
 
+	private Boolean massageType;
+	
 	private String massage;
 
 	public FullInfoResponse getRes() {
@@ -320,6 +322,14 @@ public class FullInfoResponse {
 		this.bankAccountNumber = bankAccountNumber;
 	}
 
+	public Boolean getMassageType() {
+		return massageType;
+	}
+
+	public void setMassageType(Boolean massageType) {
+		this.massageType = massageType;
+	}
+
 	public String getMassage() {
 		return massage;
 	}
@@ -334,7 +344,8 @@ public class FullInfoResponse {
 			LocalDate passportLimitDate, String residentCardNumber, LocalDate residentCardStartDate,
 			LocalDate residentCardEndDate, Boolean residentCardStatus, String telephone, String cellphone,
 			String officeMail, String otherMail, String postCode, String address, String employmentInsuranceNumber,
-			String pensionNumber, String bankName, String headquarters, String bankAccountNumber, String massage) {
+			String pensionNumber, String bankName, String headquarters, String bankAccountNumber, Boolean massageType,
+			String massage) {
 		super();
 		this.res = res;
 		this.list = list;
@@ -367,12 +378,8 @@ public class FullInfoResponse {
 		this.bankName = bankName;
 		this.headquarters = headquarters;
 		this.bankAccountNumber = bankAccountNumber;
+		this.massageType = massageType;
 		this.massage = massage;
-	}
-
-	public FullInfoResponse() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public FullInfoResponse(Integer id, String myNumber, String name, String nameKatakana, String nameRoma,
@@ -414,19 +421,26 @@ public class FullInfoResponse {
 		this.bankAccountNumber = bankAccountNumber;
 	}
 
-	public FullInfoResponse(List<FullInfoResponse> list) {
-		super();
-		this.list = list;
-	}
-
 	public FullInfoResponse(FullInfoResponse res) {
 		super();
 		this.res = res;
 	}
 
-	public FullInfoResponse(String massage) {
+	public FullInfoResponse(List<FullInfoResponse> list) {
 		super();
+		this.list = list;
+	}
+
+	public FullInfoResponse(Boolean massageType, String massage) {
+		super();
+		this.massageType = massageType;
 		this.massage = massage;
 	}
 
+	public FullInfoResponse() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	
 }
